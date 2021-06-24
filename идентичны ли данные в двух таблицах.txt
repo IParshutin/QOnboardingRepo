@@ -1,0 +1,25 @@
+create table t1(a number, b number);
+create table t2(a number, b number);
+/
+INSERT INTO t1 VALUE ( 
+select 1,  1 from dual union all
+select 2,  2 from dual union all
+select 2,  2 from dual union all
+select 3,  3 from dual union all
+select 4,  4 from dual )
+/
+INSERT INTO t2 VALUE ( 
+select 1, 1 from dual union all
+select 2, 2 from dual union all
+select 3, 3 from dual union all
+select 3, 3 from dual union all
+select 4, 4 from dual )
+/
+-- запрос
+select count(*) from
+(
+select * from t1
+INTERSECT
+select * from t2
+)
+
