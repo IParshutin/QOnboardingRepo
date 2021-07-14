@@ -1,10 +1,8 @@
-import requests
-from datetime import datetime
-import random
+import re
 import telebot
 from BotBody.auth_data import token
-import pymysql
 import mysql.connector
+from transliterate import translit
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -20,6 +18,10 @@ for x in myresult:
     print(x)
 
 
+def findWholeWord(w):
+    return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+
+
 def telegram_bot(token):
     bot = telebot.TeleBot(token)
 
@@ -29,22 +31,20 @@ def telegram_bot(token):
 
     @bot.message_handler(content_types=["text"])
     def send_text(message):
-        if message.text.lower() == "жопа":
+        text = translit(message.text.lower(), 'ru')
+        if findWholeWord('жопа')(text):
             try:
-                mycursor.execute('SELECT story FROM jokes ORDER BY rand() LIMIT 1;')
+                # mycursor.execute('SELECT story FROM jokes ORDER BY rand() LIMIT 1;')
+                mycursor.execute('SELECT  story FROM jokes ORDER BY rand() LIMIT 1;')
                 myresult = mycursor.fetchall()
                 bot.send_message(
-                    message.chat.id,
-                    f"Анекдот: {myresult}"
-                )
+                    message.chat.id, myresult)
             except Exception as ex:
                 print(ex)
                 bot.send_message(
                     message.chat.id,
                     "Damn...Something was wrong..."
                 )
-        else:
-            bot.send_message(message.chat.id, "Whaaat??? Check the command dude!")
 
     bot.polling()
 
