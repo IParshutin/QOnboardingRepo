@@ -1,0 +1,27 @@
+--_________________________
+-- 1st task
+--_________________________
+SELECT COUNT(NAME)
+FROM CITY
+WHERE POPULATION > 100000
+--ANSWER: 6;
+--_________________________
+-- 2nd task
+--_________________________
+SELECT ROUND(LONG_W,4) 
+FROM STATION 
+WHERE LAT_N>38.7780 
+ORDER BY LAT_N limit 1;
+-- ANSWER: 70.1378;
+-- Сначала подумал в сторону MIN и MAX, но вовремя перевёл с англ и нормас;
+-- ORDER BY ... limit 1 подсмотрел, когда стало выводить все значения с LAT_N>38.7780 ;
+--_________________________
+-- 3d task
+--_________________________
+SELECT ROUND(ABS(MIN(LAT_N)-MAX(LAT_N)) + ABS(MIN(LONG_W)-MAX(LONG_W)), 4) FROM STATION;
+--ANSWER: 259.6859;
+-- всё сводится к запросу = |a - c| + |b - d|;
+-- ну а там прямиком из firststeps.ru
+--_________________________
+-- 4th task
+--_________________________

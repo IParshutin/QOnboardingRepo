@@ -1,0 +1,12 @@
+select name, sum(point)
+from (
+select 'Серёжа' name , '2011' year, '23' point
+from dual
+union all
+select 'Паша' name , '2009' year, '13' point
+from dual
+union all
+select 'Серёжа' name , '2001' year, '10' point
+from dual)c
+GROUP BY name
+having count(decode(year,'2011',1))>0
